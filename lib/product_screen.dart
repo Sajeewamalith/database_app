@@ -69,7 +69,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                             IconButton(icon: Icon(Icons.edit), onPressed: (){
                                                 setState(() {
                                                    _selectedProduct = productList[index];
-                                                   showProductDialogBox(context);
+                                                   showProductDialogBox(context , InputType.UpdateProduct);
                                                 });
                                             }),
                                             IconButton(onPressed: null, icon: Icon(Icons.delete),color: Colors.red,)
@@ -90,7 +90,7 @@ class _ProductScreenState extends State<ProductScreen> {
       ),
       floatingActionButton:  FloatingActionButton(
         onPressed: () {
-          showProductDialogBox(context);
+          showProductDialogBox(context , InputType.AddProduct);
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.blue,
@@ -103,26 +103,73 @@ class _ProductScreenState extends State<ProductScreen> {
   {
     bool isUpdateProduct = false;
 
-    isUpdateProduct = ()
+    isUpdateProduct = (type == InputType.UpdateProduct) ? true : false;
+
+    if(isUpdateProduct){
+           _nameController.text = _selectedProduct.name;
+           _priceController.text = _selectedProduct.price;
+           _quantityController.text = _selectedProduct.quantity.toString();
+    }
+
     Widget saveButton = TextButton(onPressed: (){
       if(_nameController.text.isNotEmpty && _priceController.text.isNotEmpty
           && _quantityController.text.isNotEmpty){
 
-        Product product = Product();
-        Product.name = _nameController.text;
-        Product.price = _priceController.text;
-        Product.quantity = int.parse(_quantityController.text);
 
-        ProductDBHelper.instance.insertProduct(product).then((value) {
-             ProductDBHelper.instance.getProductsList().then((value) {
 
-               setState(() {
-                    productList = value;
-               });
-             });
-             Navigator.pop(context);
-             _emptyTextFields();
+
+/////////////// Add new Product .............
+
+        if(!isUpdateProduct){
+
+          setState(() {
+            Product product = Product();
+            Product.name = _nameController.text;
+            Product.price = _priceController.text;
+            Product.quantity = int.parse(_quantityController.text);
+
+          ProductDBHelper.instance.insertProduct(product).then((value) {
+            ProductDBHelper.instance.getProductsList().then((value) {
+
+              this.setState(() {
+                productList = value;
+              });
+            });
+
+            Navigator.pop(context);
+            _emptyTextFields();
+          });
+          });
+        }
+        /////////////// Update product ..............
+        else{
+
+          setState(() {
+
+            _selectedProduct.name = _nameController.text;
+            _selectedProduct.price = _priceController.text;
+            _selectedProduct.quantity = int.parse(source)
+
+            ProductDBHelper.instance.insertProduct(product).then((value) {
+              ProductDBHelper.instance.getProductsList().then((value) {
+
+                this.setState(() {
+                  productList = value;
+                });
+              });
+
+              Navigator.pop(context);
+              _emptyTextFields();
+            });
+          });
+
+
+
+        }
+
         });
+
+
       }
     },child: Text('Save'));
     Widget cancelButton = TextButton(onPressed: (){
@@ -130,7 +177,7 @@ class _ProductScreenState extends State<ProductScreen> {
     },child: const Text('Cancel'));
 
     AlertDialog productDetailBox = AlertDialog(
-      title: Text('Add new product'),
+      title: Text(!isUpdateProduct ? 'Add new product': 'Update Product'),
       content: Container(
         child: Wrap(
           children: [
