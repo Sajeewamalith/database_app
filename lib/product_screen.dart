@@ -19,6 +19,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
   List<Product> productList = [];
 
+  Product _selectedProduct;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -55,9 +57,25 @@ class _ProductScreenState extends State<ProductScreen> {
                                     child: ListTile(
                                       leading: Icon(Icons.all_inbox),
                                       title: Text(productList[index].name,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                                       subtitle: Text('LKR ${productList[index].price}',
                                         style: TextStyle(fontSize: 15),),
+                                      trailing: Container(
+                                        width: 100,
+                                        child: Wrap(
+                                           direction: Axis.horizontal,
+                                          children: [
+                                            IconButton(icon: Icon(Icons.edit), onPressed: (){
+                                                setState(() {
+                                                   _selectedProduct = productList[index];
+                                                   showProductDialogBox(context);
+                                                });
+                                            }),
+                                            IconButton(onPressed: null, icon: Icon(Icons.delete),color: Colors.red,)
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 );
@@ -81,8 +99,11 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   //////// Show product dialog box......... Name , price , quantity ........
-  showProductDialogBox(BuildContext context){
+  showProductDialogBox(BuildContext context , InputType type)
+  {
+    bool isUpdateProduct = false;
 
+    isUpdateProduct = ()
     Widget saveButton = TextButton(onPressed: (){
       if(_nameController.text.isNotEmpty && _priceController.text.isNotEmpty
           && _quantityController.text.isNotEmpty){
@@ -100,6 +121,7 @@ class _ProductScreenState extends State<ProductScreen> {
                });
              });
              Navigator.pop(context);
+             _emptyTextFields();
         });
       }
     },child: Text('Save'));
@@ -150,4 +172,11 @@ class _ProductScreenState extends State<ProductScreen> {
       return productDetailBox;
     });
   }
+  void _emptyTextFields(){
+       _nameController.text = '';
+       _priceController.text = '';
+       _quantityController.text = '';
+  }
 }
+
+enum InputType{}

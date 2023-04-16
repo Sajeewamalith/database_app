@@ -74,7 +74,7 @@ class ProductDBHelper{
 
          Database db = await instance.database;
 
-        var deletedProduct =  db.delete(_table_products, Product.toMap(product) , where: 'id=?'
+        var deletedProduct =  db.delete(_table_products,  where: 'id=?'
              ,whereArgs: [product.id]);
 
          return deleteProduct;
