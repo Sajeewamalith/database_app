@@ -1,4 +1,5 @@
 import 'package:database_app/product.dart';
+import 'package:database_app/product_db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -16,7 +17,7 @@ class _ProductScreenState extends State<ProductScreen> {
   TextEditingController _priceController = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
 
-
+  List<Product> productList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,14 @@ class _ProductScreenState extends State<ProductScreen> {
       body: Center(
         child: Column(
           children: [
+             Expanded(
+                 child: ListView.builder(
+                   itemCount: productList.length ,
+                     itemBuilder: (BuildContext context,index){
+                           if(productList.isNotEmpty){
 
+                           }
+                     }))
           ],
         ),
       ),
@@ -41,11 +49,27 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
+  //////// Show product dialog box......... Name , price , quantity ........
   showProductDialogBox(BuildContext context){
 
     Widget saveButton = TextButton(onPressed: (){
-      if(_nameController.text.isNotEmpty && _priceController.text.isNotEmpty && _quantityController.text.isNotEmpty){
+      if(_nameController.text.isNotEmpty && _priceController.text.isNotEmpty
+          && _quantityController.text.isNotEmpty){
 
+        Product product = Product();
+        Product.name = _nameController.text;
+        Product.price = _priceController.text;
+        Product.quantity = int.parse(_quantityController.text);
+
+        ProductDBHelper.instance.insertProduct(product).then((value) {
+             ProductDBHelper.instance.getProductsList().then((value) {
+
+               setState(() {
+                    productList = value;
+               });
+             });
+             Navigator.pop(context);
+        });
       }
     },child: Text('Save'));
     Widget cancelButton = TextButton(onPressed: (){
