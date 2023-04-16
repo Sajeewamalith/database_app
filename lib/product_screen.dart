@@ -1,5 +1,8 @@
+import 'package:database_app/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({Key? key}) : super(key: key);
@@ -12,6 +15,8 @@ class _ProductScreenState extends State<ProductScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +43,12 @@ class _ProductScreenState extends State<ProductScreen> {
 
   showProductDialogBox(BuildContext context){
 
-    Widget saveButton = FlatButton(onPressed: (){
-      if(_nameController.text.isNotEmpty && _priceController.text.isNotEmpty && _quantityController){
+    Widget saveButton = TextButton(onPressed: (){
+      if(_nameController.text.isNotEmpty && _priceController.text.isNotEmpty && _quantityController.text.isNotEmpty){
 
       }
     },child: Text('Save'));
-    Widget cancelButton = FlatButton(onPressed: (){
+    Widget cancelButton = TextButton(onPressed: (){
       Navigator.of(context).pop();
     },child: const Text('Cancel'));
 
@@ -62,7 +67,7 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             Container(
               child: TextFormField(
-                controller: _nameController,
+                controller: _priceController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: 'Product Price'
@@ -71,7 +76,7 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             Container(
               child: TextFormField(
-                controller: _nameController,
+                controller: _quantityController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: 'Product Quantity'
