@@ -20,6 +20,12 @@ class _ProductScreenState extends State<ProductScreen> {
   List<Product> productList = [];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +39,32 @@ class _ProductScreenState extends State<ProductScreen> {
                    itemCount: productList.length ,
                      itemBuilder: (BuildContext context,index){
                            if(productList.isNotEmpty){
-
+                                return GestureDetector(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 3,
+                                          spreadRadius: 3,
+                                          color: Colors.grey.withOpacity(0.2)
+                                        )
+                                      ]
+                                    ),
+                                    child: ListTile(
+                                      leading: Icon(Icons.all_inbox),
+                                      title: Text(productList[index].name,
+                                        style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                      subtitle: Text('LKR ${productList[index].price}',
+                                        style: TextStyle(fontSize: 15),),
+                                    ),
+                                  ),
+                                );
+                           }else{
+                             return Container(
+                                 child: Center(child: Text('List is empty'),),
+                             );
                            }
                      }))
           ],

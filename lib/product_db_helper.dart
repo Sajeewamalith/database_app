@@ -70,6 +70,16 @@ class ProductDBHelper{
 
    }
 
+   Future<Product> deleteProduct(Product product) async{
+
+         Database db = await instance.database;
+
+        var deletedProduct =  db.delete(_table_products, Product.toMap(product) , where: 'id=?'
+             ,whereArgs: [product.id]);
+
+         return deleteProduct;
+   }
+
 }
 
 
