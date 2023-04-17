@@ -55,12 +55,13 @@ class ProductDBHelper{
         );
  }
 
+ //////////// Insert data ........ Product -> DB
    Future insertProduct(Product product) async {
      Database db = await instance.database;
      return await db.insert(_table_products, Product.toMap(product) , conflictAlgorithm: ConflictAlgorithm.ignore);
    }
 
-
+/////////////// Get product Insert data..............DB -> ProductsList
    Future<List<Product>> getProductsList() async{
 
     Database db = await instance.database;
@@ -70,7 +71,19 @@ class ProductDBHelper{
 
    }
 
-   Future<Product> deleteProduct(Product product) async{
+  Future<Product> updateProduct(Product product) async{
+
+    Database db = await instance.database;
+
+    await db.update(_table_products, Product.toMap(product)  ,where: 'id=?'
+        ,whereArgs: [product.id]);
+
+    return product;
+  }
+
+
+
+  Future deleteProduct(Product product) async{
 
          Database db = await instance.database;
 

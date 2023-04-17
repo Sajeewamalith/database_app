@@ -152,6 +152,8 @@ class _ProductScreenState extends State<ProductScreen> {
             Product.quantity = int.parse(_quantityController.text);
 
           ProductDBHelper.instance.insertProduct(product).then((value) {
+
+            ////////////// Refresh products list ...............
             ProductDBHelper.instance.getProductsList().then((value) {
 
               this.setState(() {
@@ -174,6 +176,8 @@ class _ProductScreenState extends State<ProductScreen> {
             _selectedProduct.quantity = int.parse(_quantityController.text);
 
             ProductDBHelper.instance.updateProduct(_selectedProduct).then((value) {
+
+              ////////////// Refresh products list ...............
               ProductDBHelper.instance.getProductsList().then((value) {
 
                 this.setState(() {
