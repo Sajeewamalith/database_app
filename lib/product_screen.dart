@@ -25,6 +25,12 @@ class _ProductScreenState extends State<ProductScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    ProductDBHelper.instance.getProductsList().then((value) {
+      setState(() {
+        productList = value;
+      });
+    });
   }
 
   @override
@@ -72,7 +78,23 @@ class _ProductScreenState extends State<ProductScreen> {
                                                    showProductDialogBox(context , InputType.UpdateProduct);
                                                 });
                                             }),
-                                            IconButton(onPressed: null, icon: Icon(Icons.delete),color: Colors.red,)
+                                            ////////////// Delete Icon..........
+                                            IconButton( icon: Icon(Icons.delete,
+                                              color: Colors.red,),
+                                              onPressed: (){
+                                              setState(() {
+                                                _selectedProduct = productList[index];
+                                              });
+                                              ProductDBHelper.instance.
+                                              deleteProduct(_selectedProduct).then((value) {
+                                                ProductDBHelper.instance.getProductsList().then((value) {
+                                                  setState(() {
+                                                    productList = value;
+                                                  });
+                                                });
+                                              });
+                                              }
+                                              )
                                           ],
                                         ),
                                       ),
@@ -90,6 +112,7 @@ class _ProductScreenState extends State<ProductScreen> {
       ),
       floatingActionButton:  FloatingActionButton(
         onPressed: () {
+          _emptyTextFields();
           showProductDialogBox(context , InputType.AddProduct);
         },
         child: Icon(Icons.add),
@@ -148,9 +171,9 @@ class _ProductScreenState extends State<ProductScreen> {
 
             _selectedProduct.name = _nameController.text;
             _selectedProduct.price = _priceController.text;
-            _selectedProduct.quantity = int.parse(source)
+            _selectedProduct.quantity = int.parse(_quantityController.text);
 
-            ProductDBHelper.instance.insertProduct(product).then((value) {
+            ProductDBHelper.instance.updateProduct(_selectedProduct).then((value) {
               ProductDBHelper.instance.getProductsList().then((value) {
 
                 this.setState(() {
@@ -226,4 +249,4 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 }
 
-enum InputType{}
+enum InputType{AddProduct , UpdateProduct}
